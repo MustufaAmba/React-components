@@ -1,0 +1,12 @@
+.controlStyles {
+  width: 100%;
+  background: black;
+  position: relative;
+  top: -4px;
+  z-index: 2147483647;
+}
+.flexSpaceBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

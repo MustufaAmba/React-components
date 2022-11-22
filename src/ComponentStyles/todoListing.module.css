@@ -1,0 +1,20 @@
+.getListStyles {
+	padding: 8;
+	width: 250px;
+	height: 70vh;
+	margin-left: 20px;
+	overflow: hidden auto;
+	border-radius: 10px;
+}
+.getItemStyles {
+	user-select: none;
+	padding: 0px 0px 10px 10px;
+	margin: 0 0 8px 0;
+	cursor: move !important;
+	border-radius: 10px;
+}
+.badgeStyles {
+	position: absolute;
+	top: 10px;
+	right: 35px;
+}
