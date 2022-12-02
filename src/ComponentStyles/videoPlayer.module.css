@@ -10,3 +10,54 @@
   align-items: center;
   justify-content: space-between;
 }
+.flexContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hoverImageStyle {
+  position: absolute;
+  top: -160px;
+  border-radius: 10px;
+  height: 150px;
+  width: 300px;
+}
+.VolumeTextAnimation {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  font-size: 30px;
+  font-weight: 700;
+  color: white;
+  opacity: 0.7;
+}
+
+.playPauseIconAnimation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: scaling 0.5s linear forwards;
+}
+@keyframes scaling {
+  0% {
+    opacity: 0.1;
+    transform: scale(2);
+  }
+  25% {
+    opacity: 0.2;
+    transform: scale(5);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(8);
+  }
+  75% {
+    transform: scale(9);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+}

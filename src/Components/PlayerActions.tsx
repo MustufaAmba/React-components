@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
-import { IconButton, LinearProgress } from '@mui/material';
+import { IconButton, LinearProgress, Slider } from '@mui/material';
 import Styles from '../ComponentStyles/videoPlayer.module.css';
 import {
   MdForward5,
@@ -23,9 +23,10 @@ const PlayerActions: FC = () => {
     targetDuration: 0,
     targetPercentage: 0,
   });
-  const imageRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [newImage, setNewImage] = useState<string>('');
   const [showPreview, setShowPreview] = useState<boolean>(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
   const {
     videoControls,
     handlePlayPauseVideo,
@@ -36,6 +37,8 @@ const PlayerActions: FC = () => {
     calculateTime,
     setVideoControls,
     handleCurrentTimeChange,
+    keyPressHandler,
+    handleVolumeChange,
   } = useContext(CustomVideoPlayerContext);
   useEffect(() => {
     let interval = setTimeout(() => {
@@ -50,6 +53,8 @@ const PlayerActions: FC = () => {
             return previousValue + diff;
           });
         }
+      } else {
+        setVideoControls((state: any) => ({ ...state, play: false }));
       }
     }, 1000);
     return () => {
@@ -68,7 +73,6 @@ const PlayerActions: FC = () => {
       let canvas = document.createElement('canvas');
       canvas.width = 1920;
       canvas.height = 1080;
-
       let ctx = canvas.getContext('2d');
       if (ctx && videoRef.current) {
         ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
@@ -82,14 +86,8 @@ const PlayerActions: FC = () => {
           targetDuration,
         });
         if (imageRef.current) {
-          console.log('pageX', imageRef.current.clientLeft);
           imageRef.current.style.left = `${e.pageX - 50 - 150}px`;
         }
-        console.log(
-          { targetPosition },
-          { targetPercentage },
-          { targetDuration }
-        );
       }
     }
   };
@@ -148,22 +146,46 @@ const PlayerActions: FC = () => {
               : `${videoControls.seconds}`}{' '}
             / {videoControls.totalDuration}
           </span>
-          <IconButton onClick={() => handleCurrentTimeChange('backward')}>
+          <IconButton onClick={() => keyPressHandler({ keyCode: '37' })}>
             <MdReplay5 color="white"></MdReplay5>
           </IconButton>
         </div>
 
         <div style={{ display: 'flex' }}>
-          <IconButton onClick={() => handleCurrentTimeChange('forward')}>
+          <IconButton onClick={() => keyPressHandler({ keyCode: '39' })}>
             <MdForward5 color="white"></MdForward5>
           </IconButton>
-          <IconButton onClick={handleVideoSpeakerState}>
-            {videoControls.mute ? (
-              <HiSpeakerXMark color="white" />
+          <div
+            onMouseMove={() => setShowVolumeSlider(true)}
+            onMouseOut={() => setShowVolumeSlider(false)}
+            className={Styles.flexContainer}
+          >
+            {showVolumeSlider ? (
+              <Slider
+                orientation="horizontal"
+                value={videoControls.volume}
+                style={{
+                  width: 150 + 'px',
+                  marginLeft: 0.5 + 'rem',
+                }}
+                color="warning"
+                valueLabelDisplay="auto"
+                onChange={(event: Event, value: number | number[]) =>
+                  handleVolumeChange(value as number)
+                }
+              />
             ) : (
-              <HiSpeakerWave color="white" />
+              ''
             )}
-          </IconButton>
+            <IconButton onClick={handleVideoSpeakerState}>
+              {videoControls.mute ? (
+                <HiSpeakerXMark color="white" />
+              ) : (
+                <HiSpeakerWave color="white" />
+              )}
+            </IconButton>
+          </div>
+
           <IconButton
             onClick={() => handleVideoFullScreen(!videoControls.fullScreen)}
           >
@@ -182,13 +204,7 @@ const PlayerActions: FC = () => {
             src={newImage}
             height="100%"
             width="100%"
-            style={{
-              position: 'absolute',
-              top: -160 + 'px',
-              borderRadius: '10px',
-              height: 150 + 'px',
-              width: 300 + 'px',
-            }}
+            className={Styles.hoverImageStyle}
           />
         </div>
       )}

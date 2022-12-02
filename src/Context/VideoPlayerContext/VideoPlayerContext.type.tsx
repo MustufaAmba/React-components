@@ -26,6 +26,8 @@ export type VideoControlsType = {
   currentTime: number;
   totalDuration: string;
   startTime: number;
+  animationIcon: string;
+  volume: number;
 };
 export type ContextType = {
   videoControls: VideoControlsType;
@@ -37,4 +39,6 @@ export type ContextType = {
   handleVideoFullScreen: (value: boolean) => void;
   calculateTime: (hours: number, minutes: number, seconds: number) => number;
   handleCurrentTimeChange: (value?: string) => void;
+  keyPressHandler: (e: any) => void;
+  handleVolumeChange: (value: number) => void;
 };
